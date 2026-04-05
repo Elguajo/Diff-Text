@@ -1,127 +1,43 @@
-<div align="center">
-  <h1>TextDiff</h1>
-  <p>Визуальное сравнение текстов и файлов (Desktop-приложение на базе Tauri 2)</p>
+<!-- Badges -->
+![Version](https://img.shields.io/badge/version-0.1.0-blue)
+![Tauri](https://img.shields.io/badge/Tauri-24c6dc?logo=tauri&logoColor=white)
+![React](https://img.shields.io/badge/React-61dafb?logo=react&logoColor=black)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-in_development-yellow)
 
-  <img alt="Platform" src="https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-blue" />
-  <img alt="Tauri" src="https://img.shields.io/badge/Tauri-2.0-24c6dc?logo=tauri&logoColor=white" />
-  <img alt="React" src="https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=black" />
-  <img alt="Rust" src="https://img.shields.io/badge/Rust-Backend-000000?logo=rust&logoColor=white" />
-</div>
+# TextDiff
 
-<br />
+> Визуальное сравнение текстов и файлов (Desktop-приложение на базе Tauri 2)
 
+## Live Demo
+[Local Desktop App](https://localhost) — *(Desktop application)*
+
+---
+
+## About
 TextDiff — это кроссплатформенное desktop-приложение для наглядного и быстрого сравнения двух версий текста или файлов, вдохновлённое такими инструментами как Meld. Обладает современным интерфейсом благодаря React и Monaco Editor, и работает невероятно быстро за счет использования Rust и Tauri в качестве backend-оболочки.
 
-## 📋 Оглавление
-- [✨ Возможности (MVP)](#-возможности-mvp)
-- [🚀 Быстрый старт (Установка)](#-быстрый-старт-установка)
-  - [macOS / Linux](#macos--linux)
-  - [Windows](#windows)
-- [🛠 Разработка на Windows](#-разработка-на-windows)
-- [💻 Использование](#-использование)
-- [🏗 Структура проекта](#-структура-проекта)
-- [🛠 Стек технологий](#-стек-технологий)
-- [🗺 Дорожная карта](#-дорожная-карта-после-mvp)
-- [❓ Решение проблем](#-решение-проблем)
+## Features
+- Режим «Текст» — вставка двух текстов из буфера обмена для мгновенного получения diff'а.
+- Режим «Файлы» — выбор и сравнение двух файлов с диска.
+- Drag & Drop — поддержка перетаскивания файлов прямо на панели редактора.
+- Интеллектуальная подсветка — добавленное (зелёное), удалённое (красное), изменённое (жёлтое), детальная подсветка на уровне символов.
+- Быстрая навигация — перемещение по блокам изменений через F7 / Shift+F7.
+- Редактирование на лету — возможность редактировать правую панель прямо в окне сравнения и сохранять.
+- Темная и светлая темы — адаптация под системные настройки.
+- Автоопределение языка — автоматическая подсветка синтаксиса (JS, TS, Python, JSON, Markdown и др.).
 
-## ✨ Возможности (MVP)
+## Tech Stack
+| Layer | Technology |
+|---|---|
+| Framework | Tauri 2 |
+| Styling | React / CSS |
+| Content | Monaco Editor |
+| Comments | None |
+| Deployment | Desktop (.exe, .app, .deb) |
 
-* **Режим «Текст»** — вставка двух текстов из буфера обмена для мгновенного получения diff'а.
-* **Режим «Файлы»** — выбор и сравнение двух файлов с диска.
-* **Drag & Drop** — поддержка перетаскивания файлов прямо на панели редактора.
-* **Интеллектуальная подсветка** — добавленное (зелёное), удалённое (красное), изменённое (жёлтое).
-* **Сравнение внутри строк** — детальная подсветка изменений на уровне слов и символов.
-* **Быстрая навигация** — перемещение по блокам изменений через **F7** / **Shift+F7**.
-* **Редактирование на лету** — возможность редактировать правую панель прямо в окне сравнения.
-* **Сохранение** — сохранение отредактированного результата в новый файл.
-* **Темная и светлая темы** — адаптация под системные настройки.
-* **Гибкие настройки** — игнорирование пробелов, перенос строк, режим "рядом" или "вместе".
-* **Автоопределение языка** — автоматическая подсветка синтаксиса для JS, TS, Python, Ruby, JSON, Markdown и т.д.
-
-## 🚀 Быстрый старт (Установка)
-
-Для запуска приложения вам потребуются **[Node.js](https://nodejs.org)** (LTS) и **[Rust](https://rustup.rs)**.
-
-### macOS / Linux
-1. Скачайте репозиторий и перейдите в папку проекта `textdiff`.
-2. Установите зависимости системы:
-   ```bash
-   xcode-select --install
-   ```
-3. Запустите скрипт установки (он сам установит Node.js модули):
-   ```bash
-   bash setup.sh
-   ```
-4. Запустите приложение в режиме разработчика:
-   ```bash
-   npm run tauri dev
-   ```
-
-### Windows
-1. Установите **[Node.js](https://nodejs.org)** (рекомендуется LTS).
-2. Установите **[Rust](https://rustup.rs)** (скачайте и запустите `rustup-init.exe`, следуйте инструкциям по умолчанию).
-3. Перезапустите терминал или компьютер, чтобы переменные окружения обновились.
-4. Откройте папку `textdiff` в командной строке и запустите:
-   ```cmd
-   setup.bat
-   ```
-5. Запустите приложение:
-   ```cmd
-   npm run tauri dev
-   ```
-
-## 🛠 Разработка на Windows
-
-Для создания и продолжения разработки приложения на Windows выполните следующие шаги:
-
-### 1. Подготовка окружения (Prerequisites)
-Вам потребуются средства сборки C++ для работы Rust на Windows:
-- Скачайте и установите **[Visual Studio Build Tools](https://visualstudio.microsoft.com/ru/visual-cpp-build-tools/)**.
-- При установке в инсталляторе обязательно выберите **«Разработка классических приложений на C++»** (Desktop development with C++).
-- Убедитесь, что в списке справа (детали установки) включен **Windows 10/11 SDK**.
-
-### 2. Установка WebView2
-Tauri использует движок Edge WebView2 на Windows. Обычно он предустановлен в актуальных версиях Windows 10 и 11. Если приложение не запускается, показывает белый экран или выдаёт ошибку WebView2, скачайте и установите **[Microsoft Edge WebView2 Runtime](https://developer.microsoft.com/en-us/microsoft-edge/webview2/)**.
-
-### 3. Запуск режима разработки (Dev Server)
-Разработка UI (React) и Backend (Rust) происходит параллельно в одном процессе:
-```cmd
-npm run tauri dev
+## Project Structure
 ```
-- Эта команда поднимет Vite dev-сервер (для Hot Module Replacement React-компонентов).
-- Автоматически скомпилирует Rust-код и запустит нативное окно приложения.
-- При изменении `.tsx`/`.ts` файлов UI обновится мгновенно (HMR).
-- При изменении `.rs` файлов (внутри `src-tauri/`) приложение перекомпилируется и перезапустится автоматически.
-
-### 4. Создание приложения (Сборка установщика .exe / .msi)
-Когда вы захотите собрать финальный релиз-билд и получить готовое приложение/установщик:
-```cmd
-npm run tauri build
-```
-После успешной компиляции готовые файлы будут находиться в директориях:
-- MSI Установщик: `src-tauri\target\release\bundle\msi\`
-- Установщик NSIS / Портативный `.exe`: `src-tauri\target\release\bundle\nsis\`
-- Чистый билд `.exe` (без установщика): `src-tauri\target\release\`
-
-## 💻 Использование
-
-### Сравнение текстов
-1. Вставьте исходный текст в левое поле (Оригинал).
-2. Вставьте изменённый текст в правое поле (Изменённый).
-3. Diff появится автоматически в редакторе ниже.
-
-### Сравнение файлов
-1. Нажмите кнопку **📁 Оригинал** → выберите первый файл.
-2. Нажмите кнопку **📁 Изменённый** → выберите второй файл.
-*(Альтернативно: просто перетащите файлы с рабочего стола на нужную панель).*
-
-### Навигация и сохранение
-- **Навигация**: Используйте кнопки **▲ Пред.** / **▼ След.** в панели инструментов или горячие клавиши `F7` (следующее отличие) / `Shift+F7` (предыдущее отличие).
-- **Сохранение**: При редактировании правой панели нажмите **💾 Сохранить** — откроется нативный диалог сохранения файла.
-
-## 🏗 Структура проекта
-
-```text
 textdiff/
 ├── src/                    # React UI (TypeScript)
 │   ├── App.tsx             # Главный компонент логики и UI
@@ -138,45 +54,45 @@ textdiff/
 └── vite.config.ts          # Конфигурация сборщика Vite
 ```
 
-## 🛠 Стек технологий
+## Getting Started
 
-| Слой | Технология | Описание |
-|------|-----------|----------|
-| **Оболочка** | [Tauri 2](https://v2.tauri.app/) | Кроссплатформенный каркас; легче и быстрее Electron. |
-| **Интерфейс** | [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/) | Компонентный подход, строгая типизация, быстрая разработка. |
-| **Редактор** | [Monaco Editor](https://microsoft.github.io/monaco-editor/) | Движок из VS Code для рендеринга редактора и diff-панели. |
-| **Backend** | [Rust](https://www.rust-lang.org/) | Производительность и интеграция с нативными диалогами ОС (Tauri plugins). |
-| **Сборщик** | [Vite](https://vitejs.dev/) | Быстрая сборка, мгновенный запуск сервера и HMR. |
+### Prerequisites
+- Node.js LTS
+- npm 9+
+- Rust (rustup)
+- Windows: Visual Studio Build Tools (C++) & WebView2
 
-## 🗺 Дорожная карта (после MVP)
-
-- [ ] Интеграция со списком "Recent files" (последние файлы).
-- [ ] Функция "Collapse unchanged sections" (свернуть неизменённые блоки).
-- [ ] Copy block left ↔ right (перенос блока между панелями).
-- [ ] Трехстороннее сравнение (3-way merge).
-- [ ] Сравнение целых директорий (Folder compare).
-
-## ❓ Решение проблем
-
-**`npm run tauri dev` падает с ошибкой Rust:**
-Возможно, используется устаревший инструментарий. Обновите Rust:
+### Installation
 ```bash
-rustup update
-```
-
-**Редактор Monaco не загружается:**
-Возникли проблемы с зависимостями. Переустановите их:
-```bash
-rm -rf node_modules
+git clone https://github.com/yourusername/textdiff.git
+cd textdiff
 npm install
+bash setup.sh
+# Для Windows: setup.bat
+npm run tauri dev
 ```
 
-**Ошибка «Microsoft Edge WebView2 Runtime не найден» (на Windows):**
-Скачайте и установите актуальную версию WebView2 Runtime:
-https://developer.microsoft.com/en-us/microsoft-edge/webview2/
+## Environment Variables
+| Variable | Description | Required |
+|---|---|---|
+| N/A | No environment variables required | No |
 
----
+## Available Scripts
+| Command | Description |
+|---|---|
+| `npm run tauri dev` | Start dev server and Tauri application |
+| `npm run tauri build` | Build for production (.exe, .msi, .app) |
+| `npm run dev` | Start Vite dev server only |
 
-<div align="center">
-  <p>Создано с помощью React, Tauri и Rust 🦀</p>
-</div>
+## KiloCode Workflows
+| Command | Description |
+|---|---|
+| `/status.md` | Project progress dashboard |
+| `/release.md` | Tag and release a new version |
+| `/audit.md` | Full project health check |
+
+## Changelog
+See [CHANGELOG.md](./CHANGELOG.md)
+
+## License
+MIT
