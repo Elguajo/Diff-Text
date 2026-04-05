@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { DiffEditor } from "@monaco-editor/react";
 import type * as MonacoTypes from "monaco-editor";
+import { Titlebar } from "./components/Titlebar";
 
 // ─── Tauri ────────────────────────────────────────────────────────────────────
 const IS_TAURI = Boolean((window as unknown as Record<string, unknown>).__TAURI_INTERNALS__);
@@ -267,6 +268,8 @@ export default function App() {
   // ─────────────────────────────────────────────────────────────────────────────
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: C.bg, color: C.text, fontFamily: "system-ui,-apple-system,sans-serif", overflow: "hidden", userSelect: "none" }}>
+
+      <Titlebar bg={C.tab} color={C.muted} border={C.tabBorder} />
 
       {/* ═══ TAB BAR (Kilocode style) ═════════════════════════════════════════ */}
       <div style={{ height: 36, background: C.tab, borderBottom: `1px solid ${C.tabBorder}`, display: "flex", alignItems: "center", flexShrink: 0, padding: "0 4px 0 0" }}>

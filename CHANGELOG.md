@@ -2,7 +2,11 @@
 
 ## [Unreleased]
 ### Added
+- Custom frameless window implementation with `Titlebar` component
 - Project tracking documentation (PLAN.md, CHANGELOG.md, VERSION, DECISIONS.md)
+
+### Changed
+- Disabled OS default window decorations in `tauri.conf.json`
 
 ---
 
