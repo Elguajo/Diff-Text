@@ -24,6 +24,12 @@ venv/
 
 # Editor and IDE
 .vscode/
+.claude/
 .idea/
 *.swp
 *~
+
+# Rust / Tauri
+src-tauri/target/
+src-tauri/gen/
+**/*.rs.bk
