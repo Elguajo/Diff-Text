@@ -1,0 +1,1 @@
+import{i as a}from"./index-BAh0l9as.js";import"./monaco-editor-BLS8AIl0.js";async function r(e={}){return typeof e=="object"&&Object.freeze(e),await a("plugin:dialog|open",{options:e})}async function f(e={}){return typeof e=="object"&&Object.freeze(e),await a("plugin:dialog|save",{options:e})}export{r as open,f as save};

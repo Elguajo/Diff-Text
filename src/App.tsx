@@ -262,6 +262,7 @@ export default function App() {
     diffAlgorithm: "advanced",
     scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
     padding: { top: 8, bottom: 8 },
+    renderMarginRevertIcon: true,
     hideUnchangedRegions: { enabled: collapse, revealLineCount: 3, minimumLineCount: 3, contextLineCount: 3 },
   };
 
@@ -269,106 +270,110 @@ export default function App() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh", background: C.bg, color: C.text, fontFamily: "system-ui,-apple-system,sans-serif", overflow: "hidden", userSelect: "none" }}>
 
-      <Titlebar bg={C.tab} color={C.muted} border={C.tabBorder} />
+      <Titlebar bg={C.bg} color={C.muted} border={C.tabBorder} />
 
-      {/* ═══ TAB BAR (Kilocode style) ═════════════════════════════════════════ */}
-      <div style={{ height: 36, background: C.tab, borderBottom: `1px solid ${C.tabBorder}`, display: "flex", alignItems: "center", flexShrink: 0, padding: "0 4px 0 0" }}>
-
-        {/* Tab */}
-        <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "0 14px", height: "100%", borderRight: `1px solid ${C.tabBorder}`, background: C.bg, borderTop: `2px solid ${C.accent}`, minWidth: 0, maxWidth: 420, overflow: "hidden" }}>
-          {modified && <span style={{ color: C.mod, fontSize: 10, flexShrink: 0 }}>●</span>}
-          <span style={{ fontSize: 12.5, fontFamily: C.mono, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: C.text }}>
-            {left.label} ↔ {right.label}
-          </span>
-          {mode === "text" && (
-            <span style={{ fontSize: 10, color: C.muted, flexShrink: 0 }}>(Текст)</span>
-          )}
+      {/* ═══ COMMAND BAR (VS Code style) ═════════════════════════════════════════ */}
+      <div style={{ height: 44, background: C.bg, borderBottom: `1px solid ${C.tabBorder}`, display: "flex", alignItems: "center", padding: "0 12px", gap: 8, flexShrink: 0 }}>
+        
+        {/* Mode toggle */}
+        <div style={{ display: "flex", background: C.tab, border: `1px solid ${C.tabBorder}`, borderRadius: 6, padding: 2 }}>
+          {(["file","text"] as const).map(m => (
+            <button key={m} onClick={() => setMode(m)} style={{
+              padding: "4px 14px", background: mode === m ? C.bg : "transparent",
+              color: mode === m ? C.text : C.muted, border: "none", cursor: "pointer", fontSize: 12,
+              fontWeight: mode === m ? 500 : 400, boxShadow: mode === m ? `0 1px 3px rgba(0,0,0,0.1)` : "none",
+              borderRadius: 4, transition: "background 0.1s"
+            }}>
+              {m === "file" ? "Файлы" : "Текст"}
+            </button>
+          ))}
         </div>
 
-        {/* Spacer */}
+        <div style={{ width: 1, height: 20, background: C.tabBorder, margin: "0 4px" }} />
+
+        {/* File ops */}
+        {mode === "file" && (<>
+          <IBtn onClick={openLeft}  accent={C.del} title="Открыть оригинал">📂−</IBtn>
+          <IBtn onClick={openRight} accent={C.add} title="Открыть изменённый">📂+</IBtn>
+          <IBtn onClick={swap} title="Поменять местами">⇄</IBtn>
+          <div style={{ width: 1, height: 20, background: C.tabBorder, margin: "0 4px" }} />
+        </>)}
+
+        {/* Toggles */}
+        <IBtn onClick={togIWS}  active={ignoreWS}  accent={C.accent} title="Игнорировать пробелы">⌀</IBtn>
+        <IBtn onClick={togWrap} active={wordWrap}   accent={C.accent} title="Перенос строк">↵</IBtn>
+        <IBtn onClick={togColl} active={collapse}   accent={C.accent} title="Свернуть неизменённые">⊟</IBtn>
+        <IBtn onClick={togSBS}  active={!sideBySide} accent={C.accent} title="Inline / Side-by-side">⊞</IBtn>
+
         <div style={{ flex: 1 }} />
 
-        {/* Right: mode, options, navigation, save, theme */}
-        <div style={{ display: "flex", alignItems: "center", gap: 1, padding: "0 4px" }}>
-
-          {/* Mode toggle */}
-          <div style={{ display: "flex", border: `1px solid ${C.tabBorder}`, borderRadius: 4, overflow: "hidden", marginRight: 4 }}>
-            {(["file","text"] as const).map(m => (
-              <button key={m} onClick={() => setMode(m)} style={{
-                padding: "2px 9px", background: mode === m ? `${C.accent}18` : "transparent",
-                color: mode === m ? C.accent : C.muted, border: "none", cursor: "pointer", fontSize: 11.5,
-                fontWeight: mode === m ? 600 : 400,
-              }}>
-                {m === "file" ? "Файлы" : "Текст"}
-              </button>
-            ))}
-          </div>
-
-          {mode === "file" && (<>
-            <IBtn onClick={openLeft}  accent={C.del} title="Открыть оригинал">📂−</IBtn>
-            <IBtn onClick={openRight} accent={C.add} title="Открыть изменённый">📂+</IBtn>
-            <IBtn onClick={swap} title="Поменять">⇄</IBtn>
-          </>)}
-
-          <div style={{ width: 1, height: 16, background: C.tabBorder, margin: "0 4px" }} />
-
-          <IBtn onClick={togIWS}  active={ignoreWS}  accent={C.accent} title="Игнорировать пробелы">⌀</IBtn>
-          <IBtn onClick={togWrap} active={wordWrap}   accent={C.accent} title="Перенос строк">↵</IBtn>
-          <IBtn onClick={togColl} active={collapse}   accent={C.accent} title="Свернуть неизменённые">⊟</IBtn>
-          <IBtn onClick={togSBS}  active={!sideBySide} accent={C.accent} title="Inline / Side-by-side">⊞</IBtn>
-
-          <div style={{ width: 1, height: 16, background: C.tabBorder, margin: "0 4px" }} />
-
-          {/* Navigation — like Kilocode's ↑↓ in top right */}
+        {/* Navigation */}
+        <div style={{ display: "flex", alignItems: "center", background: C.tab, borderRadius: 6, padding: "2px", border: `1px solid ${C.tabBorder}` }}>
           <IBtn onClick={goPrev} disabled={stats.total === 0} title="Предыдущее (Shift+F7)">↑</IBtn>
-          <IBtn onClick={goNext} disabled={stats.total === 0} title="Следующее (F7)">↓</IBtn>
-          <span style={{ fontSize: 11, color: stats.total > 0 ? C.text : C.muted, fontFamily: C.mono, minWidth: 40, textAlign: "center", fontVariantNumeric: "tabular-nums" }}>
-            {stats.total > 0 ? `${cur}/${stats.total}` : "0/0"}
+          <span style={{ fontSize: 11, color: stats.total > 0 ? C.text : C.muted, fontFamily: C.mono, minWidth: 44, textAlign: "center", fontVariantNumeric: "tabular-nums", padding: "0 6px" }}>
+            {stats.total > 0 ? `${cur} of ${stats.total}` : "0 / 0"}
           </span>
-
-          <div style={{ width: 1, height: 16, background: C.tabBorder, margin: "0 4px" }} />
-
-          <IBtn onClick={save}   disabled={!hasContent} accent={C.add}  title="Сохранить">💾</IBtn>
-          <IBtn onClick={saveAs} disabled={!hasContent} accent={C.muted} title="Сохранить как…">↓</IBtn>
-          <IBtn onClick={() => setTheme(theme === "kilo-dark" ? "kilo-light" : "kilo-dark")} title="Тема">
-            {theme === "kilo-dark" ? "☀" : "☾"}
-          </IBtn>
+          <IBtn onClick={goNext} disabled={stats.total === 0} title="Следующее (F7)">↓</IBtn>
         </div>
+
+        <div style={{ width: 1, height: 20, background: C.tabBorder, margin: "0 4px" }} />
+
+        {/* Actions */}
+        <IBtn onClick={save}   disabled={!hasContent} accent={C.add}  title="Сохранить">💾</IBtn>
+        <IBtn onClick={saveAs} disabled={!hasContent} accent={C.muted} title="Сохранить как…">↓</IBtn>
+        <IBtn onClick={() => setTheme(theme === "kilo-dark" ? "kilo-light" : "kilo-dark")} title="Переключить тему">
+          {theme === "kilo-dark" ? "☀" : "☾"}
+        </IBtn>
       </div>
-
-      {/* ═══ BREADCRUMB (Kilocode style, file mode only) ══════════════════════ */}
-      {mode === "file" && (
-        <div style={{ height: 22, background: C.bg, borderBottom: `1px solid ${C.tabBorder}`, display: "flex", alignItems: "center", padding: "0 12px", flexShrink: 0, gap: 0 }}>
-          {breadcrumb ? (
-            <span style={{ fontSize: 11, color: C.muted, fontFamily: C.mono, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {breadcrumb}
-            </span>
-          ) : (
-            <span style={{ fontSize: 11, color: C.dim, fontStyle: "italic" }}>
-              Перетащите файл или нажмите 📂 для открытия
-            </span>
-          )}
-        </div>
-      )}
 
       {/* ═══ TEXT PASTE PANELS ════════════════════════════════════════════════ */}
       {mode === "text" && (
-        <div style={{ display: "flex", height: 190, flexShrink: 0, borderBottom: `1px solid ${C.tabBorder}` }}>
+        <div style={{ display: "flex", height: 180, flexShrink: 0, borderBottom: `1px solid ${C.tabBorder}` }}>
           {([
             { doc: left,  set: setLeft,  side: "left"  as const, col: C.del, ph: "Вставьте оригинальный текст или перетащите файл…" },
             { doc: right, set: setRight, side: "right" as const, col: C.add, ph: "Вставьте изменённый текст (ответ ИИ)…"            },
           ]).map(({ doc, set, side, col, ph }, i) => (
-            <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", borderRight: i === 0 ? `1px solid ${C.tabBorder}` : "none" }}
+            <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", borderRight: i === 0 ? `1px solid ${C.tabBorder}` : "none", background: C.tab }}
               onDragOver={e => e.preventDefault()} onDrop={drop(side)}>
-              <div style={{ padding: "2px 10px", fontSize: 11, color: col, background: `${col}0d`, borderBottom: `1px solid ${C.tabBorder}`, fontWeight: 600 }}>
+              <div style={{ padding: "4px 12px", fontSize: 11, color: col, borderBottom: `1px solid ${C.tabBorder}`, fontWeight: 600, display: "flex", alignItems: "center" }}>
                 {i === 0 ? "− Оригинал" : "+ Изменённый"}
+                <div style={{ flex: 1 }} />
+                <span style={{ fontWeight: 400, opacity: 0.5, fontStyle: "italic" }}>Вставьте текст ниже</span>
               </div>
               <textarea value={doc.content} onChange={e => set(d => ({ ...d, content: e.target.value }))} placeholder={ph}
-                style={{ flex: 1, background: "transparent", color: C.text, border: "none", outline: "none", resize: "none", padding: "8px 10px", fontFamily: C.mono, fontSize: 12.5, lineHeight: 1.55, userSelect: "auto" }} />
+                style={{ flex: 1, background: "transparent", color: C.text, border: "none", outline: "none", resize: "none", padding: "10px 12px", fontFamily: C.mono, fontSize: 12.5, lineHeight: 1.55, userSelect: "auto" }} />
             </div>
           ))}
         </div>
       )}
+
+      {/* ═══ EDITOR TABS / HEADERS ═════════════════════════════════════════════ */}
+      <div style={{ display: "flex", height: 35, background: C.bg, borderBottom: `1px solid ${C.tabBorder}`, fontSize: 12, fontFamily: "system-ui", color: C.muted, flexShrink: 0 }}>
+        {sideBySide ? (
+          <>
+            <div style={{ flex: 1, display: "flex", alignItems: "center", padding: "0 16px", borderRight: `1px solid ${C.tabBorder}` }}>
+              <span style={{ color: C.del, marginRight: 8, fontSize: 16 }}>●</span>
+              <span style={{ fontWeight: 500, color: C.text, marginRight: 8 }}>{left.label}</span>
+              <span style={{ fontSize: 11, fontStyle: "italic", opacity: 0.7 }}>(Original)</span>
+              <div style={{ flex: 1 }} />
+              {mode === "file" && breadcrumb && <span style={{ fontSize: 11, fontFamily: C.mono, opacity: 0.5 }}>{breadcrumb}</span>}
+            </div>
+            <div style={{ flex: 1, display: "flex", alignItems: "center", padding: "0 16px" }}>
+              <span style={{ color: C.add, marginRight: 8, fontSize: 16 }}>●</span>
+              <span style={{ fontWeight: 500, color: C.text, marginRight: 8 }}>{right.label}</span>
+              <span style={{ fontSize: 11, fontStyle: "italic", opacity: 0.7 }}>(Modified, Editable)</span>
+              <div style={{ flex: 1 }} />
+            </div>
+          </>
+        ) : (
+          <div style={{ flex: 1, display: "flex", alignItems: "center", padding: "0 16px" }}>
+            <span style={{ color: C.mod, marginRight: 8, fontSize: 16 }}>●</span>
+            <span style={{ fontWeight: 500, color: C.text, marginRight: 8 }}>{left.label} ↔ {right.label}</span>
+            <div style={{ flex: 1 }} />
+            {mode === "file" && breadcrumb && <span style={{ fontSize: 11, fontFamily: C.mono, opacity: 0.5 }}>{breadcrumb}</span>}
+          </div>
+        )}
+      </div>
 
       {/* ═══ EDITOR ═══════════════════════════════════════════════════════════ */}
       <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
@@ -386,22 +391,21 @@ export default function App() {
         <Ruler marks={marks} C={C} />
       </div>
 
-      {/* ═══ STATUS BAR (Kilocode / VSCode style) ════════════════════════════ */}
-      <div style={{ height: 22, display: "flex", alignItems: "center", padding: "0 10px", background: C.statusBg, flexShrink: 0, fontSize: 11, color: "#fff", gap: 10 }}>
+      {/* ═══ STATUS BAR (VS Code style) ════════════════════════════════════════ */}
+      <div style={{ height: 24, display: "flex", alignItems: "center", padding: "0 12px", background: C.accent, flexShrink: 0, fontSize: 11, color: "#fff", gap: 12 }}>
         <span>Ln {cursor.line}, Col {cursor.col}</span>
-        <span style={{ opacity: 0.4 }}>|</span>
+        <span style={{ opacity: 0.5 }}>|</span>
         <span>Spaces: 2</span>
-        <span style={{ opacity: 0.4 }}>|</span>
+        <span style={{ opacity: 0.5 }}>|</span>
         <span>UTF-8</span>
-        <span style={{ opacity: 0.4 }}>|</span>
+        <span style={{ opacity: 0.5 }}>|</span>
         <span>{language}</span>
-        <span style={{ opacity: 0.4 }}>|</span>
-        {identical && <span style={{ color: "#a0f0a0", fontWeight: 600 }}>✓ Идентичны</span>}
-        {stats.added   > 0 && <span style={{ color: "#80f080" }}>+{stats.added} доб.</span>}
-        {stats.removed > 0 && <span style={{ color: "#f08080" }}>−{stats.removed} уд.</span>}
-        {stats.modified > 0 && <span style={{ color: "#f0d080" }}>~{stats.modified} изм.</span>}
         <div style={{ flex: 1 }} />
-        {!IS_TAURI && <span style={{ opacity: 0.6 }}>⚠ Браузер</span>}
+        {identical && <span style={{ color: "#fff", fontWeight: 600 }}>✓ Идентичны</span>}
+        {stats.added   > 0 && <span style={{ color: "#d4f8d4" }}>+{stats.added} доб.</span>}
+        {stats.removed > 0 && <span style={{ color: "#ffdddd" }}>−{stats.removed} уд.</span>}
+        {stats.modified > 0 && <span style={{ color: "#f0f0f0" }}>~{stats.modified} изм.</span>}
+        {!IS_TAURI && <span style={{ opacity: 0.6, marginLeft: 12 }}>⚠ Браузер</span>}
       </div>
     </div>
   );

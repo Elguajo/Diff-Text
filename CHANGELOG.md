@@ -6,7 +6,9 @@
 - Project tracking documentation (PLAN.md, CHANGELOG.md, VERSION, DECISIONS.md)
 
 ### Changed
+- UI layout redesigned to match VS Code / Cursor aesthetic with cleaner toolbar, tab headers, and contextual breadcrumbs
 - Disabled OS default window decorations in `tauri.conf.json`
+- Enabled `renderMarginRevertIcon` in Monaco Editor to allow accepting/reverting diff blocks
 
 ---
 
